@@ -7,4 +7,8 @@ public class StudySpotException extends RuntimeException{
         super(errorType.getMessage());
         this.errorType = errorType;
     }
+
+    public ErrorType getErrorType() {
+        return this.errorType;
+    }
 }
