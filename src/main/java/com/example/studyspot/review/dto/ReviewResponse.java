@@ -1,6 +1,14 @@
 package com.example.studyspot.review.dto;
 
+import java.time.LocalDateTime;
+
 public record ReviewResponse (
-        Long id
-) {
+        double starRating,
+        String name, //depending on user
+        LocalDateTime createdAt,
+        String content,
+        String imageUrl //depending on user
+
+){
+
 }
