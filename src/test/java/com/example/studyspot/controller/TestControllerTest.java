@@ -1,5 +1,6 @@
 package com.example.studyspot.controller;
 
+import com.example.studyspot.common.exception.CommonErrorType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,18 @@ public class TestControllerTest {
     @Test
     @DisplayName("예상치 못한 예외에 대한 처리 테스트")
     void 예상치_못한_예외_처리_테스트() throws Exception {
+        //given
+        CommonErrorType commonErrorType = CommonErrorType.UN_EXPECTED_EXCEPTION;
+        String errorMessage  = commonErrorType.getMessage();
+        String errorCode = commonErrorType.getErrorCode();
+
+        //when
+        //then
         mockMvc.perform(get("/test/unexpected-exception"))
                 .andExpect(status().is5xxServerError())
-                .andExpect(content().string("예상치 못한 문제가 발생했습니다."));
+                .andExpect(jsonPath("$.status").value("error"))
+                .andExpect(jsonPath("$.errorCode").value(errorCode))
+                .andExpect(jsonPath("$.message").value(errorMessage));
     }
 
     @Test
@@ -34,6 +44,8 @@ public class TestControllerTest {
     void 정상_응답_테스트() throws Exception {
         mockMvc.perform(get("/test/no-exception"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("OK"));
+                .andExpect(jsonPath("$.data").exists())
+                .andExpect(jsonPath("$.status").exists())
+                .andExpect(jsonPath("$.data").value("OK"));
     }
 }
