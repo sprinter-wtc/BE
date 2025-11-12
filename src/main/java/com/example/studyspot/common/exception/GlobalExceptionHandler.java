@@ -1,5 +1,7 @@
 package com.example.studyspot.common.exception;
 
+import com.example.studyspot.common.api.ErrorBody;
+import com.example.studyspot.common.api.ResponseEntityGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +25,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    private ResponseEntity<String> handleException(Exception ex) {
+    private ResponseEntity<ErrorBody> handleException(Exception ex) {
         log.error("예상치 못한 예외 발생! 예외 : {}", ex);
-        return ResponseEntity.internalServerError().body("예상치 못한 문제가 발생했습니다.");
+
+        ErrorType errorType = CommonErrorType.UN_EXPECTED_EXCEPTION;
+        String errorCode = errorType.getErrorCode();
+        String errorMessage = errorType.getMessage();
+        HttpStatus httpStatus = errorType.getHttpStatus();
+
+        return ResponseEntityGenerator.error(errorCode, errorMessage, httpStatus);
     }
 }
