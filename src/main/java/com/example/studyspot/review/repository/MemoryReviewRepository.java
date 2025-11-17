@@ -1,0 +1,38 @@
+package com.example.studyspot.review.repository;
+
+import com.example.studyspot.review.domain.model.Review;
+import org.springframework.stereotype.Repository;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Repository
+public class MemoryReviewRepository implements ReviewRepository{
+
+    private static Map<Long,Review> store = new HashMap<>();
+    private static long uniqueId = 0; //Id 발급기
+
+    @Override
+    public Review save(Review review) {
+        long id = uniqueId++;
+        review.setId(id);
+        store.put(review.getId(),review);
+        return review;
+    }
+
+    @Override
+    public Review findById(Long reviewId) {
+        return store.get(reviewId);
+    }
+
+    @Override
+    public List<Review> findAllByCafeId(Long cafeId) {
+        return List.of();
+    }
+
+    @Override
+    public void clear(){
+        store.clear();
+    }
+}
