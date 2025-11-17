@@ -2,6 +2,10 @@ package com.example.studyspot.review.controller;
 
 import com.example.studyspot.review.domain.model.Review;
 import com.example.studyspot.review.dto.*;
+import com.example.studyspot.review.dto.CreateReviewCommand;
+import com.example.studyspot.review.dto.CreateReviewRequest;
+import com.example.studyspot.review.dto.CreateReviewResponse;
+import com.example.studyspot.review.dto.ReviewResponse;
 import com.example.studyspot.review.service.ReviewService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
