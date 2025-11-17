@@ -7,8 +7,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MemoryReviewRepositoryTest {
@@ -68,6 +70,48 @@ class MemoryReviewRepositoryTest {
 
         assertThat(stored.getId()).isNotEqualTo(stored2.getId());
 
+
+    }
+
+    @Test
+    void 카페_아이디_기반_리뷰목록_찾기(){
+        Review review1 = new Review(
+                null, // 추후 DB 사용시 변환하기
+                null, // 추후 인증 로직 구현시 사용 userId
+                10L,
+                4.5,
+                LocalDateTime.now(),
+                "고양이랑 오기 좋아요."
+        );
+        Review review2 = new Review(
+                null, // 추후 DB 사용시 변환하기
+                null, // 추후 인증 로직 구현시 사용 userId
+                10L,
+                4.0,
+                LocalDateTime.now(),
+                "노트북하기 좋아요."
+        );
+        Review review3 = new Review(
+                null, // 추후 DB 사용시 변환하기
+                null, // 추후 인증 로직 구현시 사용 userId
+                40L,
+                5.0,
+                LocalDateTime.now(),
+                "아인슈페너 맛집."
+        );
+        reviewRepository.save(review1);
+        reviewRepository.save(review2);
+        reviewRepository.save(review3);
+
+        List<Review> result = reviewRepository.findAllByCafeId(10L);
+
+        assertThat(result.size()).isEqualTo(2);
+        assertThat(result).extracting(Review::getCafeId)
+                .containsOnly(10L);
+        assertThat(result).extracting(Review::getContent)
+                .containsExactlyInAnyOrder(
+                        "고양이랑 오기 좋아요."
+                        ,"노트북하기 좋아요.");
 
     }
 

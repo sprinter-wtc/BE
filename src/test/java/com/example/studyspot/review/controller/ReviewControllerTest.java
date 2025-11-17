@@ -2,7 +2,7 @@ package com.example.studyspot.review.controller;
 
 import com.example.studyspot.review.dto.CreateReviewCommand;
 import com.example.studyspot.review.dto.CreateReviewRequest;
-import com.example.studyspot.review.dto.ReviewResponse;
+import com.example.studyspot.review.dto.CreateReviewResponse;
 import com.example.studyspot.review.service.ReviewService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ class ReviewControllerTest {
     @Test
     void 리뷰_생성_검증() throws Exception{
         //Service 부분 Mock 처리
-        ReviewResponse mockResponse = new ReviewResponse(0L);
+        CreateReviewResponse mockResponse = new CreateReviewResponse(0L);
         when(reviewService.create(any(CreateReviewCommand.class))).thenReturn(mockResponse);
 
         // 실제 request값 정해주기
