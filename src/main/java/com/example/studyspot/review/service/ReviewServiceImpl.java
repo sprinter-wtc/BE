@@ -4,6 +4,7 @@ import com.example.studyspot.review.domain.model.Review;
 import com.example.studyspot.review.dto.CreateReviewCommand;
 import com.example.studyspot.review.dto.CreateReviewResponse;
 import com.example.studyspot.review.dto.ReviewResponse;
+import com.example.studyspot.review.dto.UpdateReviewResponse;
 import com.example.studyspot.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -61,6 +62,20 @@ public class ReviewServiceImpl implements ReviewService{
         )).toList();
 
         return reviewsDto;
+    }
+
+    @Override
+    public UpdateReviewResponse updateReview(long reviewId, String content) {
+
+        Review review = reviewRepository.findById(reviewId);
+
+        // cafeId가 존재하지 않을 경우 예외처리 - Optional사용
+
+        review.updateContent(content);
+
+        UpdateReviewResponse updateReviewResponse = new UpdateReviewResponse(review.getId());
+
+        return updateReviewResponse;
     }
 
 
