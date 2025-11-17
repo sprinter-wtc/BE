@@ -18,4 +18,7 @@ public interface ReviewService {
 
     //리뷰 수정
     UpdateReviewResponse updateReview(long reviewId, String content);
+
+    //리뷰 삭제
+    public void deleteReview(long id);
 }
