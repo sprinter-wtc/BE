@@ -4,6 +4,7 @@ import com.example.studyspot.review.domain.model.Review;
 import com.example.studyspot.review.dto.CreateReviewCommand;
 import com.example.studyspot.review.dto.CreateReviewResponse;
 import com.example.studyspot.review.dto.ReviewResponse;
+import com.example.studyspot.review.dto.UpdateReviewResponse;
 
 import java.util.List;
 
@@ -14,4 +15,7 @@ public interface ReviewService {
 
     //리뷰 조회
     List<ReviewResponse> findAllByCafeId(Long cafeId);
+
+    //리뷰 수정
+    UpdateReviewResponse updateReview(long reviewId, String content);
 }

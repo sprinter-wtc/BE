@@ -24,4 +24,8 @@ public class Review {
     private LocalDateTime createdAt; //타입 timeStamp
     private String content;
 
+    public void updateContent(String content) {
+        //별점도 추후 추가?
+        this.content = content;
+    }
 }

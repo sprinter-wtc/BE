@@ -115,5 +115,24 @@ class MemoryReviewRepositoryTest {
 
     }
 
+    @Test
+    void 리뷰_수정_검증(){
+        String updateContent = "강아지랑 오기 좋아요";
+        Review review1 = new Review(
+                null, // 추후 DB 사용시 변환하기
+                null, // 추후 인증 로직 구현시 사용 userId
+                10L,
+                4.5,
+                LocalDateTime.now(),
+                "고양이랑 오기 좋아요."
+        );
+        Review saved = reviewRepository.save(review1);
+        //List<Review> result = reviewRepository.findAllByCafeId(10L);
+        Review found = reviewRepository.findById(saved.getId());
+        found.updateContent(updateContent);
+        Review updated = reviewRepository.findById(saved.getId());
+        assertThat(updated.getContent()).isEqualTo(updateContent);
+
+    }
 
 }

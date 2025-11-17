@@ -1,5 +1,7 @@
 package com.example.studyspot.review.controller;
 
+import com.example.studyspot.review.domain.model.Review;
+import com.example.studyspot.review.dto.*;
 import com.example.studyspot.review.dto.CreateReviewCommand;
 import com.example.studyspot.review.dto.CreateReviewRequest;
 import com.example.studyspot.review.dto.CreateReviewResponse;
@@ -23,7 +25,7 @@ public class ReviewController {
     public ResponseEntity<CreateReviewResponse> create(
             @PathVariable Long cafeId,
             @Valid @RequestBody CreateReviewRequest body
-    ){
+    ) {
         CreateReviewResponse created = reviewService.create(
                 new CreateReviewCommand(cafeId, body.starRating(), body.content()));
 
@@ -34,14 +36,20 @@ public class ReviewController {
     @GetMapping("/{cafeId}")
     public ResponseEntity<List<ReviewResponse>> getByCafeId(
             @PathVariable Long cafeId
-    ){
+    ) {
         List<ReviewResponse> body = reviewService.findAllByCafeId(cafeId);
         return ResponseEntity.ok(body);
     }
 
-
-
-
+    //Update
+    @PatchMapping("/{reviewId}")
+    public ResponseEntity<UpdateReviewResponse> updateReview(
+            @PathVariable long reviewId,
+            @Valid @RequestBody UpdateReviewRequest body
+    ) {
+        UpdateReviewResponse updated = reviewService.updateReview(reviewId, body.content());
+        return ResponseEntity.ok(updated);
+    }
 
 
 }
