@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: StudySpot
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, beans, httptrace, info, metrics, prometheus
