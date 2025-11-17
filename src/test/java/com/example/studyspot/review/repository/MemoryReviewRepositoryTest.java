@@ -135,4 +135,20 @@ class MemoryReviewRepositoryTest {
 
     }
 
+    @Test
+    void 리뷰_삭제_검증(){
+        Review review1 = new Review(
+                null, // 추후 DB 사용시 변환하기
+                null, // 추후 인증 로직 구현시 사용 userId
+                10L,
+                4.5,
+                LocalDateTime.now(),
+                "고양이랑 오기 좋아요."
+        );
+        Review saved = reviewRepository.save(review1);
+        reviewRepository.delete(saved);
+        Review deleted = reviewRepository.findById(saved.getId());
+        assertThat(deleted).isNull();
+    }
+
 }

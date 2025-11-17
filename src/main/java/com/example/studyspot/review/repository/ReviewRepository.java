@@ -11,5 +11,7 @@ public interface ReviewRepository {
 
     List<Review> findAllByCafeId(Long cafeId);
 
+    public void delete(Review review);
+
     void clear();
 }

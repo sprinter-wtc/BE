@@ -69,13 +69,22 @@ public class ReviewServiceImpl implements ReviewService{
 
         Review review = reviewRepository.findById(reviewId);
 
-        // cafeId가 존재하지 않을 경우 예외처리 - Optional사용
+        // reviewId가 존재하지 않을 경우 예외처리 - Optional사용
 
         review.updateContent(content);
 
         UpdateReviewResponse updateReviewResponse = new UpdateReviewResponse(review.getId());
 
         return updateReviewResponse;
+    }
+
+    @Override
+    public void deleteReview(long id){
+        Review review = reviewRepository.findById(id);
+
+        //reviewId 가 존재하지 않을 경우 예외처리 - Optional 사용
+
+        reviewRepository.delete(review);
     }
 
 
