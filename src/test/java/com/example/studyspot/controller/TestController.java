@@ -1,5 +1,8 @@
 package com.example.studyspot.controller;
 
+import com.example.studyspot.common.api.ResponseEntityGenerator;
+import com.example.studyspot.common.api.SuccessBody;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +22,7 @@ public class TestController {
     }
 
     @GetMapping("/test/no-exception")
-    public ResponseEntity<String> noException() throws Exception {
-        return ResponseEntity.ok("OK");
+    public ResponseEntity<SuccessBody<String>> noException() throws Exception {
+        return ResponseEntityGenerator.success("OK", HttpStatus.OK);
     }
 }
