@@ -10,4 +10,8 @@ public enum PowerOutletLevel {
     PowerOutletLevel(String value) {
         this.value = value;
     }
+
+    public String getValue() {
+        return value;
+    }
 }
