@@ -3,9 +3,7 @@ package com.example.studyspot.review.domain.model;
 import com.example.studyspot.common.exception.StudySpotException;
 import com.example.studyspot.review.dto.CreateReviewCommand;
 import com.example.studyspot.review.exception.ReviewErrorType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;
@@ -16,14 +14,19 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @ToString
+@Entity
+@Table(name="reviews")
 public class Review {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long uuserId;
     private Long cafeId;
     private Double starRating;
     private LocalDateTime createdAt; //타입 timeStamp
+
+    @Column(nullable = false,length = 400)
     private String content;
 
     private Review(Long id, Long uuserId, Long cafeId, Double starRating, LocalDateTime createdAt, String content) {
