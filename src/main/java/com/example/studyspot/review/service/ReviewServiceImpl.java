@@ -8,6 +8,7 @@ import com.example.studyspot.review.dto.ReviewResponse;
 import com.example.studyspot.review.dto.UpdateReviewResponse;
 import com.example.studyspot.review.exception.ReviewErrorType;
 import com.example.studyspot.review.repository.ReviewRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -65,6 +66,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Transactional
     public UpdateReviewResponse updateReview(Long reviewId, Double starRating, String content) {
 
         Review review = reviewRepository.findById(reviewId)
@@ -72,6 +74,8 @@ public class ReviewServiceImpl implements ReviewService {
 
         review.updateContent(content);
         review.updateStarRating(starRating);
+
+        reviewRepository.update(review);
 
         UpdateReviewResponse updateReviewResponse = new UpdateReviewResponse(review.getId());
 

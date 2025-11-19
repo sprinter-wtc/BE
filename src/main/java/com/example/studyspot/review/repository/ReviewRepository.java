@@ -14,5 +14,7 @@ public interface ReviewRepository {
 
     public void delete(Review review);
 
+    public void update(Review review);
+
     void clear();
 }

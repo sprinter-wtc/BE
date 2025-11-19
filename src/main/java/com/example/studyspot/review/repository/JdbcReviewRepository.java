@@ -1,6 +1,8 @@
 package com.example.studyspot.review.repository;
 
+import com.example.studyspot.common.exception.StudySpotException;
 import com.example.studyspot.review.domain.model.Review;
+import com.example.studyspot.review.exception.ReviewErrorType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -24,6 +26,26 @@ public class JdbcReviewRepository implements ReviewRepository {
                 rs.getTimestamp("created_at").toLocalDateTime(),
                 rs.getString("content")
                 );
+    }
+
+    @Override
+    public void update(Review review){
+        String sql = """
+                UPDATE reviews
+                SET star_rating = ?,
+                    content     = ?
+                WHERE id = ?
+                """;
+        int updatedRows = jdbcTemplate.update(
+                sql,
+                review.getStarRating(),
+                review.getContent(),
+                review.getId()
+        );
+
+        if (updatedRows == 0){
+            throw new StudySpotException(ReviewErrorType.REVIEW_NOT_FOUND);
+        }
     }
 
     @Override
