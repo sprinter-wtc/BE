@@ -22,17 +22,18 @@ public class Menu {
     private Cafe cafe;
 
     @Embedded
-    @Column(nullable = false)
+    @AttributeOverride(name = "value", column = @Column(name = "price", nullable = false))
     private Price price;
 
     @Embedded
-    @Column(nullable = false)
+    @AttributeOverride(name = "value", column = @Column(name = "menu_name", nullable = false))
     private MenuName menuName;
 
     @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "description", nullable = false))
     private Description description;
 
     @Embedded
-    @Column(nullable = false)
+    @AttributeOverride(name = "value", column = @Column(name = "image_url", nullable = false))
     private ImageUrl imageUrl;
 }
