@@ -10,4 +10,8 @@ public enum ParkingAvailability  {
     ParkingAvailability (String value) {
         this.value = value;
     }
+
+    public String getValue() {
+        return value;
+    }
 }
