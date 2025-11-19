@@ -11,14 +11,14 @@ import java.util.List;
 public interface ReviewService {
 
     //리뷰 등록
-    CreateReviewResponse create(CreateReviewCommand command);
+    CreateReviewResponse createReview(CreateReviewCommand command);
 
     //리뷰 조회
     List<ReviewResponse> findAllByCafeId(Long cafeId);
 
     //리뷰 수정
-    UpdateReviewResponse updateReview(long reviewId, String content);
+    UpdateReviewResponse updateReview(Long reviewId, Double starRating, String content);
 
     //리뷰 삭제
-    public void deleteReview(long id);
+    public void deleteReview(Long id);
 }

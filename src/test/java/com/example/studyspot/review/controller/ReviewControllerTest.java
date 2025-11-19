@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -31,20 +32,25 @@ class ReviewControllerTest {
 
     @Test
     void 리뷰_생성_검증() throws Exception{
+        //given
         //Service 부분 Mock 처리
         CreateReviewResponse mockResponse = new CreateReviewResponse(0L);
-        when(reviewService.create(any(CreateReviewCommand.class))).thenReturn(mockResponse);
+        when(reviewService.createReview(any(CreateReviewCommand.class))).thenReturn(mockResponse);
 
         // 실제 request값 정해주기
         CreateReviewRequest body = new CreateReviewRequest(5.0, "커피 좋아요");
 
         String json = objectMapper.writeValueAsString(body);
 
-        mockMvc.perform(
-                post("/reviews/{cafeId}",1L)
+        //when
+        ResultActions result = mockMvc.perform(
+                post("/reviews/{cafeId}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
-        ).andExpect(status().isCreated())
+        );
+
+        //then
+        result.andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(0L));
 
     }

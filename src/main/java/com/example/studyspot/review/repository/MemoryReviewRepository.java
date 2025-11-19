@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
@@ -23,8 +24,8 @@ public class MemoryReviewRepository implements ReviewRepository{
     }
 
     @Override
-    public Review findById(Long reviewId) {
-        return store.get(reviewId);
+    public Optional<Review> findById(Long reviewId) {
+        return Optional.ofNullable(store.get(reviewId));
     }
 
     @Override
