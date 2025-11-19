@@ -1,11 +1,11 @@
 package com.example.studyspot.cafe.domain.model;
 
+import com.example.studyspot.cafe.domain.enums.DayOfWeek;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 @Entity
