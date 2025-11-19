@@ -91,7 +91,11 @@ public class JdbcReviewRepository implements ReviewRepository {
 
     @Override
     public void delete(Review review) {
-
+        String sql = """
+                DELETE FROM reviews 
+                WHERE id = ?
+                """;
+        jdbcTemplate.update(sql,review.getId());
     }
 
     @Override
