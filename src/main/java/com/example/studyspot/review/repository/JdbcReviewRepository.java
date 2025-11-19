@@ -3,6 +3,7 @@ package com.example.studyspot.review.repository;
 import com.example.studyspot.review.domain.model.Review;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -10,9 +11,20 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Repository
-public class JdbcReviewRepository implements ReviewRepository{
+public class JdbcReviewRepository implements ReviewRepository {
 
     private final JdbcTemplate jdbcTemplate;
+
+    private RowMapper<Review> reviewRowMapper() {
+        return (rs, rowNum) -> Review.fromRow(
+                rs.getLong("id"),
+                rs.getLong("uuser_id"),
+                rs.getLong("cafe_id"),
+                rs.getDouble("star_rating"),
+                rs.getTimestamp("created_at").toLocalDateTime(),
+                rs.getString("content")
+                );
+    }
 
     @Override
     public Review save(Review review) {
@@ -36,12 +48,23 @@ public class JdbcReviewRepository implements ReviewRepository{
 
     @Override
     public Optional<Review> findById(Long reviewId) {
-        return Optional.empty();
+        String sql = """
+                SELECT id, uuser_id, cafe_id, star_rating, created_at, content
+                FROM reviews
+                WHERE id = ?
+                """;
+        List<Review> result = jdbcTemplate.query(sql, reviewRowMapper(),reviewId);
+        return result.stream().findFirst();
     }
 
     @Override
     public List<Review> findAllByCafeId(Long cafeId) {
-        return List.of();
+        String sql = """
+                SELECT id, uuser_id, cafe_id, star_rating, created_at, content
+                FROM reviews
+                WHERE cafe_id = ?
+                """;
+        return jdbcTemplate.query(sql, reviewRowMapper(),cafeId);
     }
 
     @Override

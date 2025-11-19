@@ -40,6 +40,25 @@ public class Review {
         this.content = content;
     }
 
+    public static Review fromRow(
+            Long id,
+            Long uuserId,
+            Long cafeId,
+            Double starRating,
+            LocalDateTime createdAt,
+            String content
+    ){
+        return new Review(
+                id,
+                uuserId,
+                cafeId,
+                starRating,
+                createdAt,
+                content
+        );
+
+    }
+
     public static Review from(Long id, Long uuserId, CreateReviewCommand command){
 
         return new Review(
