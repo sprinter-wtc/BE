@@ -1,5 +1,6 @@
 package com.example.studyspot.cafe.domain.model;
 
+import com.example.studyspot.cafe.domain.vo.ImageUrl;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -20,8 +21,9 @@ public class Image {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Cafe cafe;
 
-    @Column(nullable = false)
-    private String imageUrl;
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "image_url", nullable = false))
+    private ImageUrl imageUrl;
 
     @Column(nullable = false)
     private Long sequence;
