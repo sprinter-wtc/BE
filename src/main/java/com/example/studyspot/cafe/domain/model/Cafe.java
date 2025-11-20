@@ -2,10 +2,7 @@ package com.example.studyspot.cafe.domain.model;
 
 import com.example.studyspot.cafe.domain.enums.Category;
 import com.example.studyspot.cafe.domain.enums.Purpose;
-import com.example.studyspot.cafe.domain.vo.LimitTime;
-import com.example.studyspot.cafe.domain.vo.Location;
-import com.example.studyspot.cafe.domain.vo.CafeName;
-import com.example.studyspot.cafe.domain.vo.PhoneNumber;
+import com.example.studyspot.cafe.domain.vo.*;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -50,4 +47,8 @@ public class Cafe {
     @OneToOne(cascade =  CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "tag_id")
     private Tag tags;
+
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "address", nullable = false))
+    private Address address;
 }
