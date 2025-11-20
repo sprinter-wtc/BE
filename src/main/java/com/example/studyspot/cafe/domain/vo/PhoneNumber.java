@@ -2,7 +2,9 @@ package com.example.studyspot.cafe.domain.vo;
 
 import com.example.studyspot.cafe.exception.CafeErrorType;
 import com.example.studyspot.common.exception.StudySpotException;
+import jakarta.persistence.Embeddable;
 
+@Embeddable
 public record PhoneNumber(String value) {
     private static final String  VALID_PATTERN = "^(010-\\d{4}-\\d{4}|0\\d{1,2}-\\d{3,4}-\\d{4})$";
 

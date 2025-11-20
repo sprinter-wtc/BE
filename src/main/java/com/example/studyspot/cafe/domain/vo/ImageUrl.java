@@ -1,5 +1,8 @@
 package com.example.studyspot.cafe.domain.vo;
 
+import jakarta.persistence.Embeddable;
+
+@Embeddable
 public record ImageUrl (String value) {
 
     public ImageUrl {
