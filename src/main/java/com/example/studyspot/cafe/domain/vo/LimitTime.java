@@ -4,9 +4,11 @@ import com.example.studyspot.cafe.exception.CafeErrorType;
 import com.example.studyspot.common.exception.StudySpotException;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Embeddable
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LimitTime {
     private static final long MIN = 1;

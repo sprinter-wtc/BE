@@ -7,6 +7,6 @@ public record ImageDTO(
         Long sequence
 ) {
     public static ImageDTO from (Image image) {
-        return new ImageDTO(image.getImageUrl().value(), image.getSequence());
+        return new ImageDTO(image.getImageUrl().getValue(), image.getSequence());
     }
 }
