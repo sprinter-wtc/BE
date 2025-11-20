@@ -9,7 +9,9 @@ public enum CafeErrorType implements ErrorType {
     PRICE_MUST_BE_POSITIVE("CAFE-0003", HttpStatus.BAD_REQUEST, "메뉴 가격은 음수일 수 없습니다"),
 
     CAFE_NOT_FOUND("CAFE-0004", HttpStatus.BAD_REQUEST, "카페를 찾을 수 없습니다"),
-    TAG_NOT_FOUND("CAFE-0005", HttpStatus.INTERNAL_SERVER_ERROR, "카페의 태그가 존재하지 않습니다");
+    TAG_NOT_FOUND("CAFE-0005", HttpStatus.INTERNAL_SERVER_ERROR, "카페의 태그가 존재하지 않습니다"),
+    BUSINESS_HOUR_NOT_FOUND("CAFE-0006", HttpStatus.INTERNAL_SERVER_ERROR, "카페의 운영시간이 존재하지 않습니다"),
+    REPRESENTATIVE_IMAGE_NOT_FOUND("CAFE-0007", HttpStatus.INTERNAL_SERVER_ERROR, "카페의 대표 사진이 존재하지 않습니다" );
 
     private final String errorCode;
     private final HttpStatus httpStatus;

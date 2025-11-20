@@ -1,7 +1,9 @@
 package com.example.studyspot.cafe.service;
 
+import com.example.studyspot.cafe.domain.enums.DayOfWeek;
 import com.example.studyspot.cafe.domain.model.*;
 import com.example.studyspot.cafe.dto.CafeDetailsDTO;
+import com.example.studyspot.cafe.dto.CafeSimpleInfoDTO;
 import com.example.studyspot.cafe.exception.CafeErrorType;
 import com.example.studyspot.cafe.exception.CafeException;
 import com.example.studyspot.cafe.repository.BusinessHourRepository;
@@ -12,11 +14,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.TextStyle;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
 public class CafeService {
+    private final static long REPRESENTATIVE = 1;
+
     private final CafeRepository cafeRepository;
     private final BusinessHourRepository businessHourRepository;
     private final MenuRepository menuRepository;
@@ -30,6 +38,14 @@ public class CafeService {
         List<Image> images = getImagesByCafe(cafe);
 
         return CafeDetailsDTO.of(cafe, menus, businessHours, images);
+    }
+
+    @Transactional(readOnly = true)
+    public List<CafeSimpleInfoDTO> getRecommendationCafes() {
+        return findRecommendationCafes()
+                .stream()
+                .map(this::toSimpleInfo)
+                .toList();
     }
 
     private Cafe getCafeById(Long cafeId) {
@@ -49,4 +65,47 @@ public class CafeService {
         return imageRepository.findByCafe(cafe);
     }
 
+    private BusinessHour getTodayBusinessHour(Cafe cafe) {
+        DayOfWeek dayOfWeek = getTodayDayOfWeek();
+        return businessHourRepository.findByCafeAndDayOfWeek(cafe, dayOfWeek)
+                .orElseThrow(() -> new CafeException(CafeErrorType.BUSINESS_HOUR_NOT_FOUND));
+    }
+
+    private DayOfWeek getTodayDayOfWeek() {
+        LocalDate today = LocalDate.now();
+        String value = today.getDayOfWeek()
+                .getDisplayName(TextStyle.FULL, Locale.US);
+
+        return DayOfWeek.valueOf(value.toUpperCase());
+    }
+
+    private Boolean isCurrentlyWork(BusinessHour businessHour) {
+        LocalTime now =  LocalTime.now();
+        LocalTime startAt = businessHour.getStartAt();
+        LocalTime endAt = businessHour.getEnd_at();
+
+        return now.isAfter(startAt) && now.isBefore(endAt);
+    }
+
+    private Image getRepresentativeImage(Cafe cafe) {
+        return imageRepository.findByCafeAndSequence(cafe, REPRESENTATIVE)
+                .orElseThrow(() -> new CafeException(CafeErrorType.REPRESENTATIVE_IMAGE_NOT_FOUND));
+    }
+
+    private List<Cafe> findRecommendationCafes() {
+        return cafeRepository.findRecommendationCafes();
+    }
+
+    private CafeSimpleInfoDTO toSimpleInfo(Cafe cafe) {
+        BusinessHour businessHour = getTodayBusinessHour(cafe);
+        Boolean isWork = isCurrentlyWork(businessHour);
+        Image representativeImage = getRepresentativeImage(cafe);
+
+        return CafeSimpleInfoDTO.from(
+                cafe,
+                businessHour,
+                isWork,
+                representativeImage
+        );
+    }
 }
