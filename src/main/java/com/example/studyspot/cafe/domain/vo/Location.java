@@ -1,13 +1,18 @@
 package com.example.studyspot.cafe.domain.vo;
 
 import jakarta.persistence.Embeddable;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.locationtech.jts.geom.Point;
 
 @Embeddable
-public record Location(Point value) {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Location {
+    private Point value;
 
-    public Location {
+    public Location (Point value) {
         validateNotNull(value);
+        this.value = value;
     }
 
     private static void validateNotNull(Point value) {

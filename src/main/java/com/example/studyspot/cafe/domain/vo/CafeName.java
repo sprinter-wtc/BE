@@ -1,12 +1,17 @@
 package com.example.studyspot.cafe.domain.vo;
 
 import jakarta.persistence.Embeddable;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @Embeddable
-public record CafeName(String value) {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class CafeName {
+    private String value;
 
-    public CafeName {
+    public CafeName (String value) {
         validateNotBlank(value);
+        this.value = value;
     }
 
     private static void validateNotBlank(String value) {

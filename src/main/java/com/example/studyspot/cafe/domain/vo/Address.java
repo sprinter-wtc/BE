@@ -6,16 +6,15 @@ import lombok.NoArgsConstructor;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Description {
+public class Address  {
     private String value;
 
-    public Description (String value) {
+    public Address (String value) {
         validateNotBlank(value);
-        this.value = value;
     }
 
     private static void validateNotBlank(String value) {
-        if (value != null && value.isBlank())
-            throw new IllegalArgumentException("카페 이름은 비어있을 수 없습니다");
+        if (value == null || value.isBlank())
+            throw new IllegalArgumentException("카페 주소는 비어있을 수 없습니다");
     }
 }
