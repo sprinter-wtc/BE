@@ -9,45 +9,63 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-//@Repository
-public class MemoryReviewRepository implements ReviewRepository{
+////@Repository
+//public class MemoryReviewRepository implements ReviewRepository{
+//
+//    private static Map<Long,Review> store = new HashMap<>();
+//    private static long uniqueId = 0; //Id 발급기
+//
+//    @Override
+//    public Review save(Review review) {
+//        long id = uniqueId++;
+//        review.setId(id);
+//        store.put(review.getId(),review);
+//        return review;
+//    }
+//
+//    @Override
+//    public Optional<Review> findById(Long reviewId) {
+//        return Optional.ofNullable(store.get(reviewId));
+//    }
+//
+//    @Override
+//    public List<Review> findAllByCafeId(Long cafeId) {
+//
+//        return store.values().stream()
+//                .filter(review->review.getCafeId().equals(cafeId))
+//                .collect(Collectors.toList());
+//    }
+//
+//    @Override
+//    public void delete(Review review){
+//        store.remove(review.getId());
+//    }
+//
+//    @Override
+//    public void update(Review review) {
+//
+//    };
+//
+//    @Override
+//    public void clear(){
+//        store.clear();
+//    }
+//}
 
-    private static Map<Long,Review> store = new HashMap<>();
-    private static long uniqueId = 0; //Id 발급기
 
-    @Override
-    public Review save(Review review) {
-        long id = uniqueId++;
-        review.setId(id);
-        store.put(review.getId(),review);
-        return review;
-    }
+/*
+*
+* public interface ReviewRepository {
+    Review save(Review review);
 
-    @Override
-    public Optional<Review> findById(Long reviewId) {
-        return Optional.ofNullable(store.get(reviewId));
-    }
+    Optional<Review> findById(Long reviewId);
 
-    @Override
-    public List<Review> findAllByCafeId(Long cafeId) {
+    List<Review> findAllByCafeId(Long cafeId);
 
-        return store.values().stream()
-                .filter(review->review.getCafeId().equals(cafeId))
-                .collect(Collectors.toList());
-    }
+    public void delete(Review review);
 
-    @Override
-    public void delete(Review review){
-        store.remove(review.getId());
-    }
+    public void update(Review review);
 
-    @Override
-    public void update(Review review) {
-
-    };
-
-    @Override
-    public void clear(){
-        store.clear();
-    }
+    void clear();
 }
+* */

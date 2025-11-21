@@ -23,6 +23,7 @@ public class ReviewServiceImpl implements ReviewService {
 
 
     @Override
+    @Transactional
     public CreateReviewResponse createReview(CreateReviewCommand command) {
         //카페 존재 여부 검증 vo - 추후
 
@@ -42,6 +43,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Transactional
     public List<ReviewResponse> findAllByCafeId(Long cafeId) {
 
         //cafeId 존재 여부 검증 vo - 추후
@@ -74,8 +76,8 @@ public class ReviewServiceImpl implements ReviewService {
 
         review.updateContent(content);
         review.updateStarRating(starRating);
-
-        reviewRepository.update(review);
+        //변경 감지(dirty checking)으로 자동 UPDATE
+        //reviewRepository.update(review);
 
         UpdateReviewResponse updateReviewResponse = new UpdateReviewResponse(review.getId());
 
@@ -83,6 +85,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Transactional
     public void deleteReview(Long id) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new StudySpotException(ReviewErrorType.REVIEW_NOT_FOUND));
