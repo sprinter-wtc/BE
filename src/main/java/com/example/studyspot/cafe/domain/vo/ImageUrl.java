@@ -1,9 +1,19 @@
 package com.example.studyspot.cafe.domain.vo;
 
-public record ImageUrl (String value) {
+import jakarta.persistence.Embeddable;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-    public ImageUrl {
+@Embeddable
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class ImageUrl  {
+    private String value;
+
+    public ImageUrl (String value) {
         validateNotBlank(value);
+        this.value = value;
     }
 
     private static void validateNotBlank(String value) {

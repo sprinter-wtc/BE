@@ -3,13 +3,21 @@ package com.example.studyspot.cafe.domain.vo;
 import com.example.studyspot.cafe.exception.CafeErrorType;
 import com.example.studyspot.common.exception.StudySpotException;
 import jakarta.persistence.Embeddable;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Embeddable
-public record LimitTime(long value) {
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class LimitTime {
     private static final long MIN = 1;
 
-    public LimitTime {
+    private long value;
+
+    public LimitTime (long value) {
         validateMin(value);
+        this.value = value;
     }
 
     private static void validateMin(long value) {

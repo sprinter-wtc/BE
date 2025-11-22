@@ -12,10 +12,10 @@ public record MenuDTO(
 ) {
     public static MenuDTO from (Menu menu) {
         return MenuDTO.builder()
-                .name(menu.getMenuName().value())
-                .price(menu.getPrice().value())
-                .description(menu.getDescription().value())
-                .imageUrl(menu.getImageUrl().value())
+                .name(menu.getMenuName().getValue())
+                .price(menu.getPrice().getValue())
+                .description(menu.getDescription().getValue())
+                .imageUrl(menu.getImageUrl().getValue())
                 .build();
     }
 }
