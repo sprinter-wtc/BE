@@ -3,10 +3,7 @@ package com.example.studyspot.timer.service;
 import com.example.studyspot.common.exception.StudySpotException;
 import com.example.studyspot.timer.domain.model.Log;
 import com.example.studyspot.timer.domain.model.Timer;
-import com.example.studyspot.timer.dto.CreateLogCommand;
-import com.example.studyspot.timer.dto.CreateLogResponse;
-import com.example.studyspot.timer.dto.CreateTimerRequest;
-import com.example.studyspot.timer.dto.CreateTimerResponse;
+import com.example.studyspot.timer.dto.*;
 import com.example.studyspot.timer.exception.TimerErrorType;
 import com.example.studyspot.timer.repository.LogRepository;
 import com.example.studyspot.timer.repository.TimerRepository;
@@ -16,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +35,16 @@ public class TimerServiceImpl implements TimerService{
 
         return new CreateTimerResponse(saved.getId());
     }
+
+    @Override
+    public List<ReadTimerResponse> getAllTimers(){
+        List<Timer> timers = timerRepository.findAll();
+        List<ReadTimerResponse> found = timers.stream()
+                .map(ReadTimerResponse::from)
+                .toList();
+        return found;
+    };
+
     @Override
     @Transactional
     public CreateLogResponse createLog(CreateLogCommand createLogCommand){
