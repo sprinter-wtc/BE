@@ -7,10 +7,11 @@ import java.time.format.DateTimeFormatter;
 
 @UtilityClass
 public class RandomNameGenerator {
+    private static final String PREFIX = "열공 ";
     public static String generate(){
         LocalTime now = LocalTime.now();
 
         DateTimeFormatter format = DateTimeFormatter.ofPattern("HHmmssSSS");
-        return now.format(format);
+        return PREFIX + now.format(format);
     }
 }
