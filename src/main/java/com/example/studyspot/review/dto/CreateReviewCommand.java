@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 
 public record CreateReviewCommand (
-        long cafeId,
+        Long cafeId,
         double starRating,
         String content
 ){
