@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Repository
+//@Repository
 public class MemoryReviewRepository implements ReviewRepository{
 
     private static Map<Long,Review> store = new HashMap<>();
@@ -39,6 +39,11 @@ public class MemoryReviewRepository implements ReviewRepository{
     @Override
     public void delete(Review review){
         store.remove(review.getId());
+    }
+
+    @Override
+    public void update(Review review) {
+
     };
 
     @Override
