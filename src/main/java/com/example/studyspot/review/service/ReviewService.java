@@ -1,10 +1,7 @@
 package com.example.studyspot.review.service;
 
 import com.example.studyspot.review.domain.model.Review;
-import com.example.studyspot.review.dto.CreateReviewCommand;
-import com.example.studyspot.review.dto.CreateReviewResponse;
-import com.example.studyspot.review.dto.ReviewResponse;
-import com.example.studyspot.review.dto.UpdateReviewResponse;
+import com.example.studyspot.review.dto.*;
 
 import java.util.List;
 
@@ -21,4 +18,6 @@ public interface ReviewService {
 
     //리뷰 삭제
     public void deleteReview(Long id);
+
+    BestReviewsDTO getBestReviews(Long cafeId);
 }

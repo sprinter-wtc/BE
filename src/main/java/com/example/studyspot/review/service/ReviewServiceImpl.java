@@ -2,10 +2,7 @@ package com.example.studyspot.review.service;
 
 import com.example.studyspot.common.exception.StudySpotException;
 import com.example.studyspot.review.domain.model.Review;
-import com.example.studyspot.review.dto.CreateReviewCommand;
-import com.example.studyspot.review.dto.CreateReviewResponse;
-import com.example.studyspot.review.dto.ReviewResponse;
-import com.example.studyspot.review.dto.UpdateReviewResponse;
+import com.example.studyspot.review.dto.*;
 import com.example.studyspot.review.exception.ReviewErrorType;
 import com.example.studyspot.review.repository.ReviewRepository;
 import jakarta.transaction.Transactional;
@@ -93,5 +90,16 @@ public class ReviewServiceImpl implements ReviewService {
         reviewRepository.delete(review);
     }
 
+    @Override
+    public BestReviewsDTO getBestReviews(Long cafeId) {
+        Double averageStarRating = reviewRepository.getAverageRatingByCafeId(cafeId);
+        averageStarRating = Math.round(averageStarRating * 10.0) / 10.0;
+        System.out.println(cafeId);
+        System.out.println(averageStarRating);
 
+        Long reviewCount = reviewRepository.getReviewCountByCafeId(cafeId);
+        List<ReviewDTO> besteReviews = reviewRepository.findBestReviewsByCafeId(cafeId);
+
+        return BestReviewsDTO.from(averageStarRating, reviewCount, besteReviews);
+    }
 }
