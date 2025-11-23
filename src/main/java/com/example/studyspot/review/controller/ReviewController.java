@@ -1,5 +1,7 @@
 package com.example.studyspot.review.controller;
 
+import com.example.studyspot.common.api.ResponseEntityGenerator;
+import com.example.studyspot.common.api.SuccessBody;
 import com.example.studyspot.review.domain.model.Review;
 import com.example.studyspot.review.dto.*;
 import com.example.studyspot.review.dto.CreateReviewCommand;
@@ -10,6 +12,7 @@ import com.example.studyspot.review.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,6 +61,14 @@ public class ReviewController {
             @PathVariable Long reviewId) {
         reviewService.deleteReview(reviewId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/best/{cafeId}")
+    public ResponseEntity<SuccessBody<BestReviewResponse>> getBestReviews(
+            @PathVariable Long cafeId
+    ){
+        BestReviewsDTO bestReviews = reviewService.getBestReviews(cafeId);
+        return ResponseEntityGenerator.success(BestReviewResponse.from(bestReviews), HttpStatus.OK);
     }
 
 }
