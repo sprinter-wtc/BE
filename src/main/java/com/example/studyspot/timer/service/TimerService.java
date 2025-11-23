@@ -18,5 +18,7 @@ public interface TimerService {
 
     //로그 저장
     CreateLogResponse createLog(CreateLogCommand createLogCommand, Long userId);
-    
+
+    // 원하는 날짜의 공부 log 조회
+    ReadDailyLogsResponse getDailyLogsOfDay(List<Long> timerIds, long day, Long userId);
 }
