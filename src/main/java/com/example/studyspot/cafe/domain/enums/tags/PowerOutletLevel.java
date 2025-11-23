@@ -1,6 +1,8 @@
 package com.example.studyspot.cafe.domain.enums.tags;
 
-public enum PowerOutletLevel {
+import com.example.studyspot.cafe.domain.enums.BaseEnum;
+
+public enum PowerOutletLevel implements BaseEnum {
     NONE("콘센트 없음"),
     SOME("콘센트 있음"),
     MANY("콘센트 많음");
@@ -11,6 +13,7 @@ public enum PowerOutletLevel {
         this.value = value;
     }
 
+    @Override
     public String getValue() {
         return value;
     }
