@@ -17,6 +17,10 @@ public class Log {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "timer_id")
+    private Timer timer;
+
     @Column(name="day")
     private char day; //월, 화,..
     @Column(name="start_at")
@@ -37,11 +41,24 @@ public class Log {
         this.focusDuration = focusDuration;
     }
 
-    public static Log from(char day, CreateLogCommand command){
+    public static Log from( CreateLogCommand command){
+        Timestamp startAt = Timestamp.from(Instant.ofEpochMilli(command.startAt()));
+        Timestamp endAt   = Timestamp.from(Instant.ofEpochMilli(command.endAt()));
+
+        char day = switch (endAt.toLocalDateTime().getDayOfWeek()) {
+            case MONDAY    -> '월';
+            case TUESDAY   -> '화';
+            case WEDNESDAY -> '수';
+            case THURSDAY  -> '목';
+            case FRIDAY    -> '금';
+            case SATURDAY  -> '토';
+            case SUNDAY    -> '일';
+        };
+
         return new Log(
                 day,
-                Timestamp.from(Instant.ofEpochMilli(command.startAt())),
-                Timestamp.from(Instant.ofEpochMilli(command.endAt())),
+                startAt,
+                endAt,
                 command.focusDuration()
         );
     }

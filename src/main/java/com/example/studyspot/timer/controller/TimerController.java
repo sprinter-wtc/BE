@@ -4,6 +4,7 @@ import com.example.studyspot.common.api.ResponseEntityGenerator;
 import com.example.studyspot.common.api.SuccessBody;
 import com.example.studyspot.timer.dto.*;
 import com.example.studyspot.timer.service.TimerService;
+import com.sun.net.httpserver.Authenticator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -43,5 +44,18 @@ public class TimerController {
 
         return ResponseEntityGenerator.success(created, HttpStatus.CREATED);
     }
+
+    @GetMapping("/logs")
+    public ResponseEntity<SuccessBody<ReadLogsOfTimer>> getDailyStudySummaryOfTimer(
+            @RequestParam List<Long> timerId,
+            @RequestParam long start,
+            @RequestParam long end,
+            @RequestParam(defaultValue = "false") boolean withTotalTime
+    ){
+        ReadLogsOfTimer dailyStudySummary = timerService.getDailyStudySummary(timerId, start, end);
+        return ResponseEntityGenerator.success(dailyStudySummary, HttpStatus.OK);
+    }
+
+
 
 }
