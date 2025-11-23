@@ -12,7 +12,6 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @ToString
 @Entity
 @Table(name="reviews")
@@ -21,13 +20,21 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name="uuser_id")
     private Long uuserId;
+    @Column(name="cafe_id")
     private Long cafeId;
+    @Column(name="star_rating")
     private Double starRating;
+    @Column(name="created_at")
     private LocalDateTime createdAt; //타입 timeStamp
 
-    @Column(nullable = false,length = 400)
+    @Column(name="content",nullable = false,length = 400)
     private String content;
+
+    protected Review(){
+
+    }
 
     private Review(Long id, Long uuserId, Long cafeId, Double starRating, LocalDateTime createdAt, String content) {
         this.id = id;

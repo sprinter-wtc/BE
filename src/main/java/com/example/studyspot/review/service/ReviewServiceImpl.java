@@ -29,7 +29,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         // Review Entity 생성
         Review review = Review.from(
-                null, // 추후 DB 사용시 변환하기
+                null,
                 null, // 추후 인증 로직 구현시 사용 userId
                 command
         );

@@ -18,6 +18,21 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
+  datasource:
+    url: jdbc:postgresql://localhost:5432/studyspot
+    username: studyspot_admin
+    password: asdf1234
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+
+
 management:
   endpoints:
     web:
