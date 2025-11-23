@@ -94,8 +94,6 @@ public class ReviewServiceImpl implements ReviewService {
     public BestReviewsDTO getBestReviews(Long cafeId) {
         Double averageStarRating = reviewRepository.getAverageRatingByCafeId(cafeId);
         averageStarRating = Math.round(averageStarRating * 10.0) / 10.0;
-        System.out.println(cafeId);
-        System.out.println(averageStarRating);
 
         Long reviewCount = reviewRepository.getReviewCountByCafeId(cafeId);
         List<ReviewDTO> besteReviews = reviewRepository.findBestReviewsByCafeId(cafeId);
