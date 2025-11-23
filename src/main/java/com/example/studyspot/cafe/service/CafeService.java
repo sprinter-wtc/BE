@@ -3,13 +3,11 @@ package com.example.studyspot.cafe.service;
 import com.example.studyspot.cafe.domain.enums.DayOfWeek;
 import com.example.studyspot.cafe.domain.model.*;
 import com.example.studyspot.cafe.dto.CafeDetailsDTO;
+import com.example.studyspot.cafe.dto.CafeFilter;
 import com.example.studyspot.cafe.dto.CafeSimpleInfoDTO;
 import com.example.studyspot.cafe.exception.CafeErrorType;
 import com.example.studyspot.cafe.exception.CafeException;
-import com.example.studyspot.cafe.repository.BusinessHourRepository;
-import com.example.studyspot.cafe.repository.CafeRepository;
-import com.example.studyspot.cafe.repository.ImageRepository;
-import com.example.studyspot.cafe.repository.MenuRepository;
+import com.example.studyspot.cafe.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +27,7 @@ public class CafeService {
     private final BusinessHourRepository businessHourRepository;
     private final MenuRepository menuRepository;
     private final ImageRepository imageRepository;
+    private final PurposeTypeRepository purposeTypeRepository;
 
     @Transactional(readOnly = true)
     public CafeDetailsDTO getCafeDetails(Long cafeId) {
@@ -36,8 +35,9 @@ public class CafeService {
         List<Menu> menus = getMenusByCafe(cafe);
         List<BusinessHour> businessHours = getBusinessHoursByCafe(cafe);
         List<Image> images = getImagesByCafe(cafe);
+        List<PurposeType> purposeTypes = getPurposeTypesByCafe(cafe);
 
-        return CafeDetailsDTO.of(cafe, menus, businessHours, images);
+        return CafeDetailsDTO.of(cafe, menus, businessHours, images, purposeTypes);
     }
 
     @Transactional(readOnly = true)
@@ -70,6 +70,11 @@ public class CafeService {
         return businessHourRepository.findByCafeAndDayOfWeek(cafe, dayOfWeek)
                 .orElseThrow(() -> new CafeException(CafeErrorType.BUSINESS_HOUR_NOT_FOUND));
     }
+
+    private List<PurposeType> getPurposeTypesByCafe(Cafe cafe) {
+        return purposeTypeRepository.findByCafe(cafe);
+    }
+
 
     private DayOfWeek getTodayDayOfWeek() {
         LocalDate today = LocalDate.now();
@@ -107,5 +112,12 @@ public class CafeService {
                 isWork,
                 representativeImage
         );
+    }
+
+    public List<CafeSimpleInfoDTO> searchCafesByFilter(CafeFilter cafeFilter) {
+        return cafeRepository.searchByFilter(cafeFilter)
+                .stream()
+                .map(this::toSimpleInfo)
+                .toList();
     }
 }

@@ -3,7 +3,7 @@ package com.example.studyspot.cafe.domain.enums;
 import lombok.Getter;
 
 @Getter
-public enum Category {
+public enum Category implements BaseEnum {
     CAFE("카페"),
     STUDY_CAFE("스터디카페"),
     STUDY_ROOM("독서실");
@@ -14,6 +14,7 @@ public enum Category {
         this.value = value;
     }
 
+    @Override
     public String getValue() {
         return value;
     }

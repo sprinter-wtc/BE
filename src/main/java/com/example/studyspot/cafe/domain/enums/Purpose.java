@@ -3,7 +3,7 @@ package com.example.studyspot.cafe.domain.enums;
 import lombok.Getter;
 
 @Getter
-public enum Purpose {
+public enum Purpose implements BaseEnum {
     BOOK("책"),
     LAPTOP("노트북"),
     DATE("데이트"),
@@ -17,6 +17,7 @@ public enum Purpose {
         this.value = value;
     }
 
+    @Override
     public String getValue() {
         return value;
     }

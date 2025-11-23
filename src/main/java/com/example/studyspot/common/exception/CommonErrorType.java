@@ -3,7 +3,8 @@ package com.example.studyspot.common.exception;
 import org.springframework.http.HttpStatus;
 
 public enum CommonErrorType implements ErrorType{
-    UN_EXPECTED_EXCEPTION("COMMON-0001", HttpStatus.INTERNAL_SERVER_ERROR, "서버에서 예상치 못한 에러가 발생했습니다.");
+    UN_EXPECTED_EXCEPTION("COMMON-0001", HttpStatus.INTERNAL_SERVER_ERROR, "서버에서 예상치 못한 에러가 발생했습니다."),
+    ENUM_CANNOT_CONVERT("COMMON-0002", HttpStatus.BAD_REQUEST, "문자열에 해당되는 enum이 존재하지 않습니다");
 
     private final String errorCode;
     private final HttpStatus httpStatus;

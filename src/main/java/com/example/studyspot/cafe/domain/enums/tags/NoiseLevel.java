@@ -1,6 +1,8 @@
 package com.example.studyspot.cafe.domain.enums.tags;
 
-public enum  NoiseLevel {
+import com.example.studyspot.cafe.domain.enums.BaseEnum;
+
+public enum  NoiseLevel implements BaseEnum {
     LOW("조용함"),
     MEDIUM("적당한 소음"),
     HIGH("시끌벅적");
@@ -11,6 +13,7 @@ public enum  NoiseLevel {
         this.value = value;
     }
 
+    @Override
     public String getValue() {
         return value;
     }

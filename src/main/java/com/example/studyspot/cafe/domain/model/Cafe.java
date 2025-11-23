@@ -38,12 +38,6 @@ public class Cafe {
     @AttributeOverride(name = "value", column = @Column(name = "phone_number", nullable = false))
     private PhoneNumber phoneNumber;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "purpose", joinColumns = @JoinColumn(name = "cafe_id"))
-    @Column(name = "value")
-    @Enumerated(EnumType.STRING)
-    private Set<Purpose> purposes;
-
     @OneToOne(cascade =  CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "tag_id")
     private Tag tags;

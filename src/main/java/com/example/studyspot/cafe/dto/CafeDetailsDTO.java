@@ -6,6 +6,8 @@ import lombok.Builder;
 
 import java.util.List;
 
+import static java.util.Arrays.stream;
+
 @Builder
 public record CafeDetailsDTO (
         Long id,
@@ -19,10 +21,10 @@ public record CafeDetailsDTO (
         List<MenuDTO> menuList,
         List<ImageDTO> imageList
 ) {
-    public static CafeDetailsDTO of(Cafe cafe, List<Menu> menus, List<BusinessHour> businessHours, List<Image> images) {
-        String[] purpose = cafe.getPurposes()
+    public static CafeDetailsDTO of(Cafe cafe, List<Menu> menus, List<BusinessHour> businessHours, List<Image> images, List<PurposeType> purposeType) {
+        String[] purpose = purposeType
                 .stream()
-                .map(Purpose::getValue)
+                .map(type-> type.getPurpose().getValue())
                 .toArray(String[]::new);
 
         TagDTO tags = TagDTO.from(cafe.getTags());
