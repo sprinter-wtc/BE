@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/timers")
 @RequiredArgsConstructor
@@ -22,6 +24,12 @@ public class TimerController {
     ){
         CreateTimerResponse created = timerService.createTimer(body);
         return ResponseEntityGenerator.success(created, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<SuccessBody<ReadTimersResponse>> getAllTimers(){
+        List<ReadTimerResponse> allTimers = timerService.getAllTimers();
+        return ResponseEntityGenerator.success(new ReadTimersResponse(allTimers),HttpStatus.OK);
     }
 
     @PostMapping("/{timerId}/logs")
