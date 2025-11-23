@@ -3,6 +3,7 @@ package com.example.studyspot.cafe.service;
 import com.example.studyspot.cafe.domain.enums.DayOfWeek;
 import com.example.studyspot.cafe.domain.model.*;
 import com.example.studyspot.cafe.dto.CafeDetailsDTO;
+import com.example.studyspot.cafe.dto.CafeFilter;
 import com.example.studyspot.cafe.dto.CafeSimpleInfoDTO;
 import com.example.studyspot.cafe.exception.CafeErrorType;
 import com.example.studyspot.cafe.exception.CafeException;
@@ -111,5 +112,12 @@ public class CafeService {
                 isWork,
                 representativeImage
         );
+    }
+
+    public List<CafeSimpleInfoDTO> searchCafesByFilter(CafeFilter cafeFilter) {
+        return cafeRepository.searchByFilter(cafeFilter)
+                .stream()
+                .map(this::toSimpleInfo)
+                .toList();
     }
 }
