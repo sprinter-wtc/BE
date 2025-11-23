@@ -40,7 +40,7 @@ public class JwtTokenProvider {
 
     public String extractToken(String token) {
         if (token == null)
-            throw new AuthException(AuthErrorType.NULL_TOKEN_EXCEPTION);
+            throw new AuthException(AuthErrorType.NULL_TOKEN);
 
         if (!token.contains(BEARER))
             throw new AuthException(AuthErrorType.NOT_VALID_TOKEN);
