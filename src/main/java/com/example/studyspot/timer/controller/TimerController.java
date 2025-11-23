@@ -1,5 +1,6 @@
 package com.example.studyspot.timer.controller;
 
+import com.example.studyspot.common.annotation.UserId;
 import com.example.studyspot.common.api.ResponseEntityGenerator;
 import com.example.studyspot.common.api.SuccessBody;
 import com.example.studyspot.timer.dto.*;
@@ -21,25 +22,30 @@ public class TimerController {
 
     @PostMapping
     public ResponseEntity<SuccessBody<CreateTimerResponse>> createTimer(
-            @Valid @RequestBody CreateTimerRequest body
+            @Valid @RequestBody CreateTimerRequest body,
+            @UserId Long userId
     ){
-        CreateTimerResponse created = timerService.createTimer(body);
+        CreateTimerResponse created = timerService.createTimer(body,userId);
         return ResponseEntityGenerator.success(created, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<SuccessBody<ReadTimersResponse>> getAllTimers(){
-        List<ReadTimerResponse> allTimers = timerService.getAllTimers();
+    public ResponseEntity<SuccessBody<ReadTimersResponse>> getAllTimers(
+            @UserId Long userId
+    ){
+        List<ReadTimerResponse> allTimers = timerService.getAllTimers(userId);
         return ResponseEntityGenerator.success(new ReadTimersResponse(allTimers),HttpStatus.OK);
     }
 
     @PostMapping("/{timerId}/logs")
     public ResponseEntity<SuccessBody<CreateLogResponse>> saveLog(
             @PathVariable Long timerId,
-            @Valid @RequestBody CreateLogRequest body
+            @Valid @RequestBody CreateLogRequest body,
+            @UserId Long userId
             ){
         CreateLogResponse created = timerService.createLog(
-                new CreateLogCommand(timerId, body.startAt(), body.endAt(), body.focusDuration())
+                new CreateLogCommand(timerId, body.startAt(), body.endAt(), body.focusDuration()),
+                userId
         );
 
         return ResponseEntityGenerator.success(created, HttpStatus.CREATED);
@@ -50,12 +56,11 @@ public class TimerController {
             @RequestParam List<Long> timerId,
             @RequestParam long start,
             @RequestParam long end,
-            @RequestParam(defaultValue = "false") boolean withTotalTime
+            @RequestParam(defaultValue = "false") boolean withTotalTime,
+            @UserId Long userId
     ){
-        ReadLogsOfTimer dailyStudySummary = timerService.getDailyStudySummary(timerId, start, end);
+        ReadLogsOfTimer dailyStudySummary = timerService.getDailyStudySummary(timerId, start, end, userId, withTotalTime);
         return ResponseEntityGenerator.success(dailyStudySummary, HttpStatus.OK);
     }
-
-
 
 }

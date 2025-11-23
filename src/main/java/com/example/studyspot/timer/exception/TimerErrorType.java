@@ -4,7 +4,8 @@ import com.example.studyspot.common.exception.ErrorType;
 import org.springframework.http.HttpStatus;
 
 public enum TimerErrorType implements ErrorType {
-    TIMER_NOT_FOUND("REVIEW-0001",HttpStatus.NOT_FOUND, "해당 타이머가 없습니다.");
+    TIMER_NOT_FOUND("REVIEW-0001",HttpStatus.NOT_FOUND, "해당 타이머가 없습니다."),
+    UNAUTHORIZED_TIMER_ACCESS("TIMER-0002", HttpStatus.FORBIDDEN, "해당 타이머에 접근할 권한이 없습니다.");
 
     private final String errorCode;
     private final HttpStatus httpStatus;
