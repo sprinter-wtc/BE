@@ -20,4 +20,6 @@ public interface ReviewService {
     public void deleteReview(Long id);
 
     BestReviewsDTO getBestReviews(Long cafeId);
+
+    Double getAverageStarRatingByCafeId(Long id);
 }

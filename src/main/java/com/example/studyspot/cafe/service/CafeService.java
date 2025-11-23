@@ -8,6 +8,7 @@ import com.example.studyspot.cafe.dto.CafeSimpleInfoDTO;
 import com.example.studyspot.cafe.exception.CafeErrorType;
 import com.example.studyspot.cafe.exception.CafeException;
 import com.example.studyspot.cafe.repository.*;
+import com.example.studyspot.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,8 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class CafeService {
     private final static long REPRESENTATIVE = 1;
+
+    private final ReviewService reviewService;
 
     private final CafeRepository cafeRepository;
     private final BusinessHourRepository businessHourRepository;
@@ -105,12 +108,14 @@ public class CafeService {
         BusinessHour businessHour = getTodayBusinessHour(cafe);
         Boolean isWork = isCurrentlyWork(businessHour);
         Image representativeImage = getRepresentativeImage(cafe);
+        Double averageStarRating = reviewService.getAverageStarRatingByCafeId(cafe.getId());
 
         return CafeSimpleInfoDTO.from(
                 cafe,
                 businessHour,
                 isWork,
-                representativeImage
+                representativeImage,
+                averageStarRating
         );
     }
 

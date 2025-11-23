@@ -92,12 +92,16 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public BestReviewsDTO getBestReviews(Long cafeId) {
-        Double averageStarRating = reviewRepository.getAverageRatingByCafeId(cafeId);
-        averageStarRating = Math.round(averageStarRating * 10.0) / 10.0;
-
+        Double averageStarRating = getAverageStarRatingByCafeId(cafeId);
         Long reviewCount = reviewRepository.getReviewCountByCafeId(cafeId);
         List<ReviewDTO> besteReviews = reviewRepository.findBestReviewsByCafeId(cafeId);
 
         return BestReviewsDTO.from(averageStarRating, reviewCount, besteReviews);
+    }
+
+    @Override
+    public Double getAverageStarRatingByCafeId(Long cafeId) {
+        Double averageStarRating = reviewRepository.getAverageRatingByCafeId(cafeId);
+        return Math.round(averageStarRating * 10.0) / 10.0;
     }
 }

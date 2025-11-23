@@ -24,7 +24,8 @@ public record CafeSimpleInfoDTO(
     public static CafeSimpleInfoDTO from (Cafe cafe,
                                           BusinessHour businessHour,
                                           Boolean isWork,
-                                          Image representativeImage) {
+                                          Image representativeImage,
+                                          Double averageStarRating) {
         Tag tag = cafe.getTags();
         String[] tags = new String[]{
                 tag.getPowerOutletLevel().getValue(),
@@ -34,7 +35,7 @@ public record CafeSimpleInfoDTO(
         return CafeSimpleInfoDTO.builder()
                 .id(cafe.getId())
                 .name(cafe.getName().getValue())
-                .averageStarRating(4.5) //이 부분은 리뷰와 합쳐진 후 인자로 받게끔 리팩토링
+                .averageStarRating(averageStarRating) //이 부분은 리뷰와 합쳐진 후 인자로 받게끔 리팩토링
                 .isWork(isWork)
                 .startingTime(businessHour.getStartAt())
                 .closingTime(businessHour.getEnd_at())
