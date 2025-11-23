@@ -63,4 +63,14 @@ public class TimerController {
         return ResponseEntityGenerator.success(dailyStudySummary, HttpStatus.OK);
     }
 
+    @GetMapping("/details/logs")
+    public ResponseEntity<SuccessBody<ReadDailyLogsResponse>> getDailyLogs(
+            @RequestParam List<Long> timerId,
+            @RequestParam long day,
+            @UserId Long userId
+    ){
+        ReadDailyLogsResponse response = timerService.getDailyLogsOfDay(timerId, day, userId);
+        return ResponseEntityGenerator.success(response, HttpStatus.OK);
+    }
+
 }

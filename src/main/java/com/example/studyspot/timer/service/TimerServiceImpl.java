@@ -7,14 +7,16 @@ import com.example.studyspot.timer.dto.*;
 import com.example.studyspot.timer.exception.TimerErrorType;
 import com.example.studyspot.timer.repository.LogRepository;
 import com.example.studyspot.timer.repository.TimerRepository;
-import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 
@@ -222,6 +224,58 @@ public class TimerServiceImpl implements TimerService{
 
         return new CreateLogResponse(persisted.getId());
 
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ReadDailyLogsResponse getDailyLogsOfDay(List<Long> timerIds, long day, Long userId) {
+
+        LocalDate targetDate = parseLongDate(day);
+
+        Timestamp startTS = Timestamp.valueOf(targetDate.atStartOfDay());
+        Timestamp endTS = Timestamp.valueOf(targetDate.atTime(LocalTime.MAX));
+
+        List<Timer> timers = timerRepository.findAllById(timerIds);
+
+        timers.stream()
+                .filter(t->!t.getUuserId().equals(userId))
+                .findAny()
+                .ifPresent(t->{
+                    throw new StudySpotException(TimerErrorType.UNAUTHORIZED_TIMER_ACCESS);
+                });
+
+        //각 타이머별 시간 사이에 해당하는 로그 조회
+        List<DailyLogsOfTimerResponse> dailyLogs = timers.stream()
+                .map(timer -> buildDailyLogs(timer, startTS, endTS))
+                .toList();
+
+        return new ReadDailyLogsResponse(dailyLogs);
+    }
+
+    private DailyLogsOfTimerResponse buildDailyLogs(Timer timer,
+                                                    Timestamp startTs,
+                                                    Timestamp endTs){
+        List<Log> logs = logRepository.findByTimerIdAndStartAtBetween(
+                timer.getId(), startTs, endTs
+        );
+
+        List<SingleLogResponse> logDtos = logs.stream()
+                .map(log-> new SingleLogResponse(
+                        log.getStartAt().getTime(),
+                        log.getEndAt().getTime(),
+                        log.getFocusDuration()
+                )).toList();
+
+        long totalTime = logs.stream()
+                .mapToLong(Log::getFocusDuration)
+                .sum();
+
+        return new DailyLogsOfTimerResponse(
+                timer.getId(),
+                timer.getName(),
+                totalTime,
+                logDtos
+        );
     }
 
     private char getDayOfWeek(){
