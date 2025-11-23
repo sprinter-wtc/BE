@@ -1,12 +1,9 @@
 package com.example.studyspot.cafe.dto;
 
-import com.example.studyspot.cafe.domain.enums.Purpose;
 import com.example.studyspot.cafe.domain.model.*;
 import lombok.Builder;
 
 import java.util.List;
-
-import static java.util.Arrays.stream;
 
 @Builder
 public record CafeDetailsDTO (
@@ -15,6 +12,7 @@ public record CafeDetailsDTO (
         String category,
         double[] location,
         String[] purpose,
+        List<BusinessHourDTO> businessHourList,
         Long limitTime,
         String phoneNumber,
         TagDTO tags,
@@ -28,6 +26,11 @@ public record CafeDetailsDTO (
                 .toArray(String[]::new);
 
         TagDTO tags = TagDTO.from(cafe.getTags());
+
+        List<BusinessHourDTO> businessHourList = businessHours
+                .stream()
+                .map(BusinessHourDTO::from)
+                .toList();
 
         List<MenuDTO> menuList = menus
                 .stream()
@@ -45,6 +48,7 @@ public record CafeDetailsDTO (
                 .category(cafe.getCategory().getValue())
                 .location(cafe.getLocation().toCoordinates())
                 .purpose(purpose)
+                .businessHourList(businessHourList)
                 .limitTime(cafe.getLimitTime().getValue())
                 .phoneNumber((cafe.getPhoneNumber().getValue()))
                 .tags(tags)

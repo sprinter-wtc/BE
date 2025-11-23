@@ -1,9 +1,6 @@
 package com.example.studyspot.cafe.dto.response;
 
-import com.example.studyspot.cafe.dto.CafeDetailsDTO;
-import com.example.studyspot.cafe.dto.ImageDTO;
-import com.example.studyspot.cafe.dto.MenuDTO;
-import com.example.studyspot.cafe.dto.TagDTO;
+import com.example.studyspot.cafe.dto.*;
 import lombok.Builder;
 
 import java.util.List;
@@ -15,6 +12,7 @@ public record CafeDetailsResponse(
         String category,
         double[] location,
         String[] purpose,
+        List<BusinessHourDTO> businessHourList,
         Long limitTime,
         String phoneNumber,
         TagDTO tags,
@@ -28,6 +26,7 @@ public record CafeDetailsResponse(
                 .category(dto.category())
                 .location(dto.location())
                 .purpose(dto.purpose())
+                .businessHourList(dto.businessHourList())
                 .limitTime(dto.limitTime())
                 .phoneNumber(dto.phoneNumber())
                 .tags(dto.tags())
