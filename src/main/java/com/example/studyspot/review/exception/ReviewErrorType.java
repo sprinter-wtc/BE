@@ -22,16 +22,16 @@ public enum ReviewErrorType implements ErrorType {
 
     @Override
     public HttpStatus getHttpStatus() {
-        return null;
+        return httpStatus;
     }
 
     @Override
     public String getMessage() {
-        return "";
+        return message;
     }
 
     @Override
     public String getErrorCode() {
-        return "";
+        return errorCode;
     }
 }

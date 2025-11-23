@@ -6,6 +6,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @AllArgsConstructor
 @Entity
@@ -15,7 +18,7 @@ public class Timer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="uuser_Id")
+    @Column(name="uuser_id")
     private Long uuserId;
     @Column(name="duration",nullable = false)
     private Long duration;
@@ -24,8 +27,31 @@ public class Timer {
     @Column(name="color",nullable = false)
     private String color;
 
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JoinColumn(name = "timer_id")
+    private List<Log> logs = new ArrayList<>();
+
+    public void addLog(Log log){
+        logs.add(log);
+    }
+
+    public List<Log> getLogs(){
+        return logs;
+    }
+
     protected Timer(){
 
+    }
+
+    private Timer(Long id, Long uuserId, Long duration, String name, String color) {
+        this.id = id;
+        this.uuserId = uuserId;
+        this.duration = duration;
+        this.name = name;
+        this.color = color;
     }
 
     public static Timer from(Long id, Long uuserId, CreateTimerRequest request){
