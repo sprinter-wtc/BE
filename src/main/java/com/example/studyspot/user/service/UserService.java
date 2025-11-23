@@ -12,7 +12,12 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public User createGuestUser() {
-        return userRepository.save(User.createUserOfRandomName());
+    public User createOrFindGuestUser(String ssaid) {
+        return userRepository.findBySsaid(ssaid)
+                .orElseGet(() -> createUserOfRandomName(ssaid));
+    }
+
+    public User createUserOfRandomName(String ssaid) {
+        return userRepository.save(User.createUserOfRandomName(ssaid));
     }
 }
