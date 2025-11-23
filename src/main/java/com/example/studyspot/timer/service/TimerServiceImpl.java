@@ -30,10 +30,10 @@ public class TimerServiceImpl implements TimerService{
 
     @Override
     @Transactional
-    public CreateTimerResponse createTimer(CreateTimerRequest createTimerRequest) {
+    public CreateTimerResponse createTimer(CreateTimerRequest createTimerRequest, Long userId) {
         Timer timer = Timer.from(
                 null,
-                null,
+                userId,
                 createTimerRequest
         );
 
@@ -44,8 +44,9 @@ public class TimerServiceImpl implements TimerService{
 
     @Override
     @Transactional
-    public List<ReadTimerResponse> getAllTimers(){
-        List<Timer> timers = timerRepository.findAll();
+    public List<ReadTimerResponse> getAllTimers(Long userId){
+        List<Timer> timers = timerRepository.findByUuserId(userId);
+
         List<ReadTimerResponse> found = timers.stream()
                 .map(ReadTimerResponse::from)
                 .toList();
@@ -54,19 +55,70 @@ public class TimerServiceImpl implements TimerService{
 
     @Override
     @Transactional
-    public ReadLogsOfTimer getDailyStudySummary(List<Long> timerIds, long start, long end) {
+    public ReadLogsOfTimer getDailyStudySummary(List<Long> timerIds, long start, long end, Long userId,boolean withTotalTime) {
         //long->timestamp
         Timestamp startTS = Timestamp.from(Instant.ofEpochMilli(start));
         Timestamp endTS = Timestamp.from(Instant.ofEpochMilli(end));
 
         List<Timer> timers = timerRepository.findAllById(timerIds);
 
+        //userId가 맞지 않는 타이머가 하나라도 있는지 검사
+        timers.stream()
+                .filter(timer -> !timer.getUuserId().equals(userId))
+                .findAny()
+                .ifPresent(t->{
+                    throw new StudySpotException(TimerErrorType.UNAUTHORIZED_TIMER_ACCESS);
+                });
+
         List<DailyStudySummaryResponse> summaries = timers.stream()
                 .map(timer -> buildSummaryForTimer(timer, startTS, endTS))
                 .toList();
 
+        if (withTotalTime==true){
+            return new ReadLogsOfTimer(summaries, getTotalTimeOfDailyStudy(summaries));
+        }
 
-        return new ReadLogsOfTimer(summaries);
+        return new ReadLogsOfTimer(summaries, null);
+    }
+
+    private TotalStudyOfDayResponse getTotalTimeOfDailyStudy(List<DailyStudySummaryResponse> summaries){
+        List<DailyStudyOfDayResponse> allDays = summaries.stream()
+                .flatMap(summary -> summary.durationOfDate().stream())
+                .toList();
+
+        Map<Long, Long> totalByDate = allDays.stream()
+                .collect(groupingBy(
+                        DailyStudyOfDayResponse::date,
+                        summingLong(DailyStudyOfDayResponse::dailyTotalDuration)
+                ));
+
+        List<DailyStudyOfDayResponse> totalDurationOfDate = totalByDate.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey()) // date(long) 기준 정렬
+                .map(entry -> {
+                    long dateLong = entry.getKey();
+                    long dailyTotal = entry.getValue();
+
+                    LocalDate localDate = parseLongDate(dateLong);
+                    char dayChar = convertDayOfWeek(localDate.getDayOfWeek());
+
+                    return new DailyStudyOfDayResponse(
+                            dateLong,
+                            dayChar,
+                            dailyTotal
+                    );
+                })
+                .toList();
+
+        long totalDuration = totalDurationOfDate.stream()
+                .mapToLong(DailyStudyOfDayResponse::dailyTotalDuration)
+                .sum();
+
+        TotalStudyOfDayResponse totalTime = new TotalStudyOfDayResponse(
+                totalDuration,
+                totalDurationOfDate
+        );
+        return totalTime;
+
     }
 
     private DailyStudySummaryResponse buildSummaryForTimer(Timer timer,
@@ -119,6 +171,13 @@ public class TimerServiceImpl implements TimerService{
                 + date.getDayOfMonth();
     }
 
+    private LocalDate parseLongDate(long yyyymmdd) {
+        int year  = (int) (yyyymmdd / 10000);
+        int month = (int) ((yyyymmdd / 100) % 100);
+        int day   = (int) (yyyymmdd % 100);
+        return LocalDate.of(year, month, day);
+    }
+
     private char convertDayOfWeek(DayOfWeek day) {
         return switch (day) {
             case MONDAY    -> '월';
@@ -135,11 +194,17 @@ public class TimerServiceImpl implements TimerService{
 
     @Override
     @Transactional
-    public CreateLogResponse createLog(CreateLogCommand createLogCommand){
+    public CreateLogResponse createLog(CreateLogCommand createLogCommand, Long userId){
 
         // 타이머 조회
         Timer timer = timerRepository.findById(createLogCommand.timerId())
                 .orElseThrow(()-> new StudySpotException(TimerErrorType.TIMER_NOT_FOUND));
+
+
+        // 유저 인증
+        if (!timer.getUuserId().equals(userId)){
+            throw new StudySpotException(TimerErrorType.UNAUTHORIZED_TIMER_ACCESS);
+        }
 
         // 로그 생성
         Log log = Log.from(
