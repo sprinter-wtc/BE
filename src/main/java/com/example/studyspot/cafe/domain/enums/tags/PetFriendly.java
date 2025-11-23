@@ -1,6 +1,8 @@
 package com.example.studyspot.cafe.domain.enums.tags;
 
-public enum PetFriendly {
+import com.example.studyspot.cafe.domain.enums.BaseEnum;
+
+public enum PetFriendly implements BaseEnum {
     ALLOWED("애견 동반 가능"),
     NOT_ALLOWED("애견 동반 불가능");
 
@@ -10,6 +12,7 @@ public enum PetFriendly {
         this.value = value;
     }
 
+    @Override
     public String getValue() {
         return value;
     }
